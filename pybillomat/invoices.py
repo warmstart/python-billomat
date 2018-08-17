@@ -14,7 +14,6 @@ from http import Url
 import errors
 from _items_base import Item, ItemsIterator
 
-
 def _invoice_xml(
     client_id = None,
     contact_id = None,
@@ -241,6 +240,67 @@ class Invoice(Item):
             # Raise Error
             raise errors.BillomatError("\n".join(error_text_list))
 
+
+    def send_snailmail(
+        self,
+        color = None,
+        duplex = None,
+        paper_weight = None,
+        attachments = None
+    ):
+        """
+        Sends the invoice snailmail (Post) to the customer
+        Warning: Pixelletter account needed!
+
+        :param color=Determines whether to use color printing.
+        :param duplex=Determines whether to use duplex printing.
+        :param paper_weight=Determines the paper weight in grams.
+        :param attachments=Further PDF files.
+        """
+
+        # Path
+        path = "{base_path}/{id}/mail".format(
+            base_path = self.base_path,
+            id = self.id
+        )
+
+        # XML
+        mail_tag = ET.Element("mail")
+
+        # Color
+        if color:
+            color_tag = ET.Element("color")
+            color_tag.text = color
+            mail_tag.append(color_tag)
+
+        # Duplex
+        if duplex:
+            duplex_tag = ET.Element("duplex")
+            duplex_tag.text = duplex
+            mail_tag.append(duplex_tag)
+
+        # Paper_weight
+        if paper_weight:
+            paper_weight_tag = ET.Element("paper_weight")
+            paper_weight_tag.text = paper_weight
+            mail_tag.append(paper_weight_tag)
+
+
+        # ToDo: Attachments
+
+        xml = ET.tostring(mail_tag)
+
+        # Send POST-request
+        response = self.conn.post(path = path, body = xml)
+
+        if response.status != 200:
+            # Parse response
+            error_text_list = []
+            for error in ET.fromstring(response.data):
+                error_text_list.append(error.text)
+
+            # Raise Error
+            raise errors.BillomatError("\n".join(error_text_list))
 
     def send(
         self,
