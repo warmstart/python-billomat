@@ -53,15 +53,10 @@ class Connection(object):
         # Initialize Urllib3-ConnectionPool
         if urllib3:
             scheme, host, port = urllib3.get_host(self.url)
-
-
-            # ToDo: certifi einbauen und testen
-            # https://urllib3.readthedocs.org/en/latest/security.html#using-certifi-with-urllib3
-            # https://github.com/gerold-penz/python-billomat/issues/1
-
+            import certifi
 
             self.conn = urllib3.HTTPSConnectionPool(
-                host = host, port = port, timeout = self.timeout_seconds
+                host = host, port = port, timeout = self.timeout_seconds, cert_reqs='CERT_REQUIRED', ca_certs=certifi.where()
             )
 
         else:
