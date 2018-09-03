@@ -4,6 +4,13 @@ Python Billomat API Client Library
 
 by Gerold Penz 2014-2016
 
+=============
+Version 0.6.1
+=============
+
+2018-08-21
+
+- fix #1; verify https certificates
 
 =============
 Version 0.6.0
