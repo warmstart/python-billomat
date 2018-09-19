@@ -59,6 +59,7 @@ def _client_xml(
     offer_validity_days_type = None,
     offer_validity_days = None,
     currency_code = None,
+    debitor_account_number = None,
     price_group = None,
     locale = None
 ):
@@ -261,6 +262,10 @@ def _client_xml(
         currency_code_tag = ET.Element("currency_code")
         currency_code_tag.text = unicode(currency_code)
         client_tag.append(currency_code_tag)
+    if debitor_account_number is not None:
+        debitor_account_number_tag = ET.Element("debitor_account_number")
+        debitor_account_number_tag.text = unicode(debitor_account_number)
+        client_tag.append(debitor_account_number_tag)
     if price_group is not None:
         price_group_tag = ET.Element("price_group")
         price_group_tag.text = unicode(int(price_group))
@@ -337,6 +342,7 @@ class Client(Item):
         self.offer_validity_days_type = None
         self.offer_validity_days = None
         self.currency_code = None
+        self.debitor_account_number = None
         self.price_group = None
         self.note = None
         self.revenue_gross = None  # Float
@@ -396,6 +402,7 @@ class Client(Item):
         offer_validity_days_type = None,
         offer_validity_days = None,
         currency_code = None,
+        debitor_account_number = None,
         price_group = None,
         locale = None
     ):
@@ -476,9 +483,10 @@ class Client(Item):
         :param offer_validity_days: Validity of estimates
         :param currency_code: The currency for this client. ISO currency code.
             If this field is empty, the account currency is used.
+        :param debitor_account_number: Debitor account number
         :param price_group: Artciles can have several prices.
             The pricegroup defines which price applies to the client.
-        :param locale: Locale of the client. If no value is passed, 
+        :param locale: Locale of the client. If no value is passed,
             the locale of the account will be applied to the client.
         """
 
@@ -527,6 +535,7 @@ class Client(Item):
             offer_validity_days_type = offer_validity_days_type,
             offer_validity_days = offer_validity_days,
             currency_code = currency_code,
+            debitor_account_number = debitor_account_number,
             price_group = price_group,
             locale = locale
         )
@@ -591,6 +600,7 @@ class Client(Item):
         offer_validity_days_type = None,
         offer_validity_days = None,
         currency_code = None,
+        debitor_account_number = None,
         price_group = None,
         locale = None
     ):
@@ -670,9 +680,10 @@ class Client(Item):
         :param offer_validity_days: Validity of estimates
         :param currency_code: The currency for this client. ISO currency code.
             If this field is empty, the account currency is used.
+        :param debitor_account_number: Debitor Account Number
         :param price_group: Artciles can have several prices.
             The pricegroup defines which price applies to the client.
-        :param locale: Locale of the client. If no value is passed, 
+        :param locale: Locale of the client. If no value is passed,
             the locale of the account will be applied to the client.
         """
 
@@ -727,6 +738,7 @@ class Client(Item):
             offer_validity_days_type = offer_validity_days_type,
             offer_validity_days = offer_validity_days,
             currency_code = currency_code,
+            debitor_account_number = None,
             price_group = price_group,
             locale = locale
         )
@@ -805,7 +817,7 @@ class Clients(list):
         :param allow_empty_filter: If `True`, every filter-parameter may be empty.
             All clients will returned. !!! EVERY CLIENT !!!
         """
-        
+
         # Check empty filter
         if not allow_empty_filter:
             if not any([
