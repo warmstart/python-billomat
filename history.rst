@@ -3,6 +3,21 @@ Python Billomat API Client Library
 ##################################
 
 by Gerold Penz 2014-2016
+and Holger Dinkel 2018
+
+=============
+Version 0.6.3
+=============
+
+2018-09-19
+
+add debitor_account_number to clients parameters
+
+=============
+Version 0.6.2
+=============
+
+2018-09-03
 
 =============
 Version 0.6.1
