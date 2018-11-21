@@ -6,6 +6,14 @@ by Gerold Penz 2014-2016
 and Holger Dinkel 2018
 
 =============
+Version 0.6.4
+=============
+
+2018-11-21
+
+add template_id to invoice creation
+
+=============
 Version 0.6.3
 =============
 

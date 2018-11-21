@@ -40,6 +40,7 @@ def _invoice_xml(
     offer_id = None,
     confirmation_id = None,
     recurring_id = None,
+    template_id = None,
 ):
     """
     Creates the XML to add or edit an invoice
@@ -56,6 +57,7 @@ def _invoice_xml(
         "number_length",
         "invoice_id",
         "recurring_id",
+        "template_id",
     ]
     date_or_string_fieldnames = [
         "supply_date",
@@ -437,6 +439,7 @@ class Invoice(Item):
         offer_id = None,
         confirmation_id = None,
         recurring_id = None,
+        template_id = None,
         # invoice_items = None
     ):
         """
@@ -476,6 +479,7 @@ class Invoice(Item):
             created from a confirmation.
         :param recurring_id: The ID of the recurring, if the invoice was
             created from a recurring.
+        :param template_id: ID of template to use.
         # :param invoice_items: List with InvoiceItem-Objects
         """
 
@@ -505,23 +509,24 @@ class Invoice(Item):
             invoice_id = invoice_id,
             offer_id = offer_id,
             confirmation_id = confirmation_id,
-            recurring_id = recurring_id
+            recurring_id = recurring_id,
+            template_id = template_id
         )
 
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
             raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
-    
+
         # Create Invoice-Object
         invoice = cls(conn = conn)
         invoice.content_language = response.headers.get("content-language", None)
         invoice.load_from_xml(response.data)
-    
+
         # Finished
         return invoice
-    
-    
+
+
     def edit(
         self,
         id = None,
@@ -720,7 +725,7 @@ class Invoices(list):
         :param allow_empty_filter: If `True`, every filter-parameter may be empty.
             So, all invoices will returned. !!! EVERY INVOICE !!!
         """
-        
+
         # Check empty filter
         if not allow_empty_filter:
             if not any([
