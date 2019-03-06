@@ -553,6 +553,7 @@ class Invoice(Item):
         payment_types = None,
         invoice_id = None,
         offer_id = None,
+        template_id = None,
         confirmation_id = None,
         recurring_id = None,
     ):
@@ -589,6 +590,7 @@ class Invoice(Item):
             invoice correction.
         :param offer_id: The ID of the estimate, if the invoice was created
             from an estimate.
+        :param template_id: ID of template to use.
         :param confirmation_id: The ID of the confirmation, if the invoice was
             created from a confirmation.
         :param recurring_id: The ID of the recurring, if the invoice was
@@ -626,6 +628,7 @@ class Invoice(Item):
             payment_types = payment_types,
             invoice_id = invoice_id,
             offer_id = offer_id,
+            template_id = template_id,
             confirmation_id = confirmation_id,
             recurring_id = recurring_id
         )

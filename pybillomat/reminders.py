@@ -24,6 +24,7 @@ def _reminder_xml(
     label = None,
     intro = None,
     note = None,
+    template_id = None,
 ):
     """
     Creates the XML to add or edit a reminder
@@ -129,7 +130,8 @@ class Reminder(Item):
         subject = None,
         label = None,
         intro = None,
-        note = None
+        note = None,
+        template_id = None
     ):
         """
         Creates a reminder
@@ -150,6 +152,7 @@ class Reminder(Item):
             Default: Introductory text of the next dunning level (if available)
         :param note: Explanatory notes;
             Default: Explanatory notes of the next dunning level (if available)
+        :param template_id: ID of template to use.
         """
 
         # XML
@@ -169,16 +172,16 @@ class Reminder(Item):
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
             raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
-    
+
         # Create Reminder-Object
         reminder = cls(conn = conn)
         reminder.content_language = response.headers.get("content-language", None)
         reminder.load_from_xml(response.data)
-    
+
         # Finished
         return reminder
-    
-    
+
+
     def edit(
         self,
         id = None,
@@ -190,7 +193,8 @@ class Reminder(Item):
         subject = None,
         label = None,
         intro = None,
-        note = None
+        note = None,
+        template_id = None
     ):
         """
         Edit a reminder
@@ -211,6 +215,7 @@ class Reminder(Item):
             Default: Introductory text of the next dunning level (if available)
         :param note: Explanatory notes;
             Default: Explanatory notes of the next dunning level (if available)
+        :param template_id: ID of template to use.
         """
 
         # Parameters
@@ -229,7 +234,8 @@ class Reminder(Item):
             subject = subject,
             label = label,
             intro = intro,
-            note = note
+            note = note,
+            template_id = template_id
         )
 
         # Path
@@ -451,7 +457,7 @@ class Reminders(list):
         :param allow_empty_filter: If `True`, every filter-parameter may be empty.
             So, all reminders will returned. !!! EVERY !!!
         """
-        
+
         # Check empty filter
         if not allow_empty_filter:
             if not any([
