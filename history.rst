@@ -3,7 +3,15 @@ Python Billomat API Client Library
 ##################################
 
 by Gerold Penz 2014-2016
-and Holger Dinkel 2018
+and Holger Dinkel 2018-2019
+
+=============
+Version 0.6.5
+=============
+
+2019-03-06
+
+add template_id to reminder creation and invoice/reminder edit
 
 =============
 Version 0.6.4
