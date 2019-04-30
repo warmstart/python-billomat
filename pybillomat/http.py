@@ -3,9 +3,10 @@
 """
 Connection
 """
+from past.builtins import basestring
 
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 if "APPENGINE_RUNTIME" in os.environ:
     # Google App Engine
@@ -16,7 +17,7 @@ else:
     # Urllib3
     import urllib3
     urlfetch = None
-import urlparse
+import urllib.parse
 
 
 class Connection(object):
@@ -202,7 +203,7 @@ class Url(object):
                 parsed_path,
                 parsed_query,
                 parsed_fragment
-            ) = urlparse.urlsplit(url)
+            ) = urllib.parse.urlsplit(url)
             if scheme is None:
                 scheme = parsed_scheme
             if netloc is None:
@@ -216,18 +217,24 @@ class Url(object):
 
         # Scheme
         if isinstance(scheme, basestring):
+            if isinstance(scheme, bytes):
+                scheme = scheme.decode("utf-8")
             self.scheme = scheme.strip(":/")
         else:
             self.scheme = None
 
         # Netloc
         if isinstance(netloc, basestring):
+            if isinstance(netloc, bytes):
+                netloc = netloc.decode("utf-8")
             self.netloc = netloc.strip("/")
         else:
             self.netloc = None
 
         # Path
         if isinstance(path, basestring):
+            if isinstance(path, bytes):
+                path = path.decode("utf-8")
             self.path = path
         else:
             try:
@@ -237,8 +244,9 @@ class Url(object):
 
         # Query
         if isinstance(query, basestring):
-            if isinstance(query, unicode):
-                query = query.encode("utf-8").strip(u"?&")
+            if isinstance(query, bytes):
+                query = query.decode("utf-8")
+            query = query.strip("?&")
             for item_pair in query.split("&"):
                 key, value = item_pair.split("=")
                 self.query[key] = value
@@ -247,8 +255,9 @@ class Url(object):
 
         # Fragment
         if isinstance(fragment, basestring):
-            if isinstance(fragment, unicode):
-                fragment = fragment.encode("utf-8").strip("?&")
+            if isinstance(fragment, bytes):
+                fragment = fragment.decode("utf-8")
+            fragment = fragment.strip("?&")
             for item_pair in fragment.split("&"):
                 key, value = item_pair.split("=")
                 self.fragment[key] = value
@@ -276,29 +285,29 @@ class Url(object):
 
         if self.query:
             query = {}
-            for key, value in self.query.items():
-                if isinstance(key, unicode):
-                    key = key.encode("utf-8")
-                if isinstance(value, unicode):
-                    value = value.encode("utf-8")
+            for key, value in list(self.query.items()):
+                if isinstance(key, bytes):
+                    key = key.decode("utf-8")
+                if isinstance(value, bytes):
+                    value = value.decode("utf-8")
                 query[key] = value
-            query_str = urllib.urlencode(query)
+            query_str = urllib.parse.urlencode(query)
         else:
             query_str = None
 
         if self.fragment:
             fragment = {}
-            for key, value in self.fragment.items():
-                if isinstance(key, unicode):
-                    key = key.encode("utf-8")
-                if isinstance(value, unicode):
-                    value = value.encode("utf-8")
+            for key, value in list(self.fragment.items()):
+                if isinstance(key, bytes):
+                    key = key.decode("utf-8")
+                if isinstance(value, bytes):
+                    value = value.decode("utf-8")
                 fragment[key] = value
-            fragment_str = urllib.urlencode(fragment)
+            fragment_str = urllib.parse.urlencode(fragment)
         else:
             fragment_str = None
 
-        return urlparse.urlunsplit((
+        return urllib.parse.urlunsplit((
             scheme,
             self.netloc,
             path,

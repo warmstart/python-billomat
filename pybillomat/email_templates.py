@@ -6,12 +6,11 @@ Email-Templates
 - English API-Description: http://www.billomat.com/de/api/einstellungen/email-vorlagen
 - Deutsche API-Beschreibung: http://www.billomat.com/en/api/settings/email-vorlagen
 """
-
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 def _email_template_xml(
@@ -44,7 +43,7 @@ def _email_template_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             email_template_tag.append(new_tag)
 
     # Boolean Fields
@@ -62,7 +61,7 @@ def _email_template_xml(
 
 class EmailTemplate(Item):
 
-    base_path = u"/api/email-templates"
+    base_path = "/api/email-templates"
 
 
     def __init__(self, conn, id = None, email_template_etree = None):
@@ -129,7 +128,7 @@ class EmailTemplate(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create EmailTemplate-Object
         email_template = cls(conn = conn)
@@ -188,7 +187,7 @@ class EmailTemplate(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
 
 class EmailTemplates(list):

@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import datetime
-import errors
+from . import errors
 import xml.etree.ElementTree as ET
 from munch import Munch as Bunch
 
@@ -16,7 +16,7 @@ class Item(Bunch):
 
     id = None
     content_language = None
-    base_path = u"/api/<object>"
+    base_path = "/api/<object>"
     _customfield_value = None
 
 
@@ -85,7 +85,7 @@ class Item(Bunch):
                     text.lower() == "row not found"
                 ):
                     raise errors.NotFoundError(
-                        u"id: {id}".format(id = self.id)
+                        "id: {id}".format(id = self.id)
                     )
 
         # Finished
@@ -131,7 +131,7 @@ class Item(Bunch):
         # Fetch data
         response = self.conn.delete(path = path)
         if response.status != 200:
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data))
 
 
     def get_customfield(self):
@@ -146,7 +146,7 @@ class Item(Bunch):
         # Check essential data
         if not self.id:
             raise errors.NoIdError()
-        assert self.base_path != u"/api/<object>"
+        assert self.base_path != "/api/<object>"
 
         # Path
         path = "{base_path}/{id}/customfield".format(
@@ -180,12 +180,12 @@ class Item(Bunch):
 
         # Parameter
         if value is None:
-            value = u""
+            value = ""
 
         # Check essential data
         if not self.id:
             raise errors.NoIdError()
-        assert self.base_path != u"/api/<object>"
+        assert self.base_path != "/api/<object>"
 
         # Path
         path = "{base_path}/{id}/customfield".format(
@@ -200,14 +200,14 @@ class Item(Bunch):
         root_tag_name = self.base_path.rsplit("/", 1)[-1].rstrip("s")
         root_tag = ET.Element(root_tag_name)
         customfield_tag = ET.Element("customfield")
-        customfield_tag.text = unicode(value)
+        customfield_tag.text = str(value)
         root_tag.append(customfield_tag)
         xml = ET.tostring(root_tag)
 
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
 
     @property
@@ -280,7 +280,7 @@ class ItemsIterator(object):
         """
 
         # List-Ids
-        all_list_ids = range(len(self))
+        all_list_ids = list(range(len(self)))
         requested_list_ids = all_list_ids[key]
         is_list = isinstance(requested_list_ids, list)
         if not is_list:

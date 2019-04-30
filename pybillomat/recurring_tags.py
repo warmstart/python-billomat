@@ -6,18 +6,17 @@ Recurring-Tags
 - English API-Description: http://www.billomat.com/en/api/recurrings/tags
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/abo-rechnungen/schlagworte
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class RecurringTag(Item):
 
-    base_path = u"/api/recurring-tags"
+    base_path = "/api/recurring-tags"
 
 
     def __init__(self, conn, id = None, tag_etree = None):
@@ -61,11 +60,11 @@ class RecurringTag(Item):
         recurring_tag = ET.Element("recurring-tag")
 
         recurring_id_tag = ET.Element("recurring_id")
-        recurring_id_tag.text = unicode(int(recurring_id))
+        recurring_id_tag.text = str(int(recurring_id))
         recurring_tag.append(recurring_id_tag)
 
         name_tag = ET.Element("name")
-        name_tag.text = unicode(name)
+        name_tag.text = str(name)
         recurring_tag.append(name_tag)
 
         xml = ET.tostring(recurring_tag)
@@ -73,7 +72,7 @@ class RecurringTag(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create Item-Object from XML
         item_object = cls(conn = conn)
@@ -165,7 +164,7 @@ class RecurringTags(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"recurring_id: {recurring_id}".format(recurring_id = recurring_id)
+                        "recurring_id: {recurring_id}".format(recurring_id = recurring_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

@@ -6,18 +6,17 @@ Article-Properties
 - English API-Description: http://www.billomat.com/en/api/articles/properties
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/artikel/attribute
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class ArticleProperty(Item):
 
-    base_path = u"/api/article-property-values"
+    base_path = "/api/article-property-values"
 
 
     def __init__(self, conn, id = None, property_etree = None):
@@ -65,15 +64,15 @@ class ArticleProperty(Item):
         property_tag = ET.Element("article-property-value")
 
         article_id_tag = ET.Element("article_id")
-        article_id_tag.text = unicode(int(article_id))
+        article_id_tag.text = str(int(article_id))
         property_tag.append(article_id_tag)
 
         article_property_id_tag = ET.Element("article_property_id")
-        article_property_id_tag.text = unicode(int(article_property_id))
+        article_property_id_tag.text = str(int(article_property_id))
         property_tag.append(article_property_id_tag)
 
         value_tag = ET.Element("value")
-        value_tag.text = unicode(value)
+        value_tag.text = str(value)
         property_tag.append(value_tag)
 
         xml = ET.tostring(property_tag)
@@ -81,7 +80,7 @@ class ArticleProperty(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create Property-Object
         property = cls(conn = conn)
@@ -178,7 +177,7 @@ class ArticleProperties(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"article_id: {article_id}".format(article_id = article_id)
+                        "article_id: {article_id}".format(article_id = article_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

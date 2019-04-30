@@ -31,5 +31,5 @@ conn = pybillomat.Connection(
 recurring_items_iterator = pybillomat.RecurringItemsIterator(conn = conn)
 recurring_items_iterator.search(recurring_id = [52582, 52581])
 for recurring_item in recurring_items_iterator:
-    print recurring_item
-    print
+    print(recurring_item)
+    print()

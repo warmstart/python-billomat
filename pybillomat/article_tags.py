@@ -6,18 +6,17 @@ Article-Tags
 - English API-Description: http://www.billomat.com/en/api/articles/tags
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/artikel/schlagworte
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class ArticleTag(Item):
 
-    base_path = u"/api/article-tags"
+    base_path = "/api/article-tags"
 
 
     def __init__(self, conn, id = None, tag_etree = None):
@@ -61,11 +60,11 @@ class ArticleTag(Item):
         article_tag = ET.Element("article-tag")
 
         article_id_tag = ET.Element("article_id")
-        article_id_tag.text = unicode(int(article_id))
+        article_id_tag.text = str(int(article_id))
         article_tag.append(article_id_tag)
 
         name_tag = ET.Element("name")
-        name_tag.text = unicode(name)
+        name_tag.text = str(name)
         article_tag.append(name_tag)
 
         xml = ET.tostring(article_tag)
@@ -73,7 +72,7 @@ class ArticleTag(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create Item-Object from XML
         item_object = cls(conn = conn)
@@ -165,7 +164,7 @@ class ArticleTags(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"article_id: {article_id}".format(article_id = article_id)
+                        "article_id: {article_id}".format(article_id = article_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

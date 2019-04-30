@@ -6,13 +6,12 @@ Credit-Notes
 - English API-Description: http://www.billomat.com/en/api/credit-notes/
 - Deutsche API-Beschreibung: http://www.billomat.com/api/gutschriften/
 """
-
 import datetime
 import xml.etree.ElementTree as ET
 from munch import Munch as Bunch
-from http import Url
-import errors
-from _items_base import Item, ItemsIterator
+from .http import Url
+from . import errors
+from ._items_base import Item, ItemsIterator
 
 
 def _credit_note_xml(
@@ -71,7 +70,7 @@ def _credit_note_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(int(value))
+            new_tag.text = str(int(value))
             credit_note_tag.append(new_tag)
 
     # Date or string fields
@@ -82,7 +81,7 @@ def _credit_note_xml(
             if isinstance(value, datetime.date):
                 new_tag.text = value.isoformat()
             else:
-                new_tag.text = unicode(value)
+                new_tag.text = str(value)
             credit_note_tag.append(new_tag)
 
     # Date fields
@@ -98,7 +97,7 @@ def _credit_note_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(float(value))
+            new_tag.text = str(float(value))
             credit_note_tag.append(new_tag)
 
     # String Fields
@@ -106,7 +105,7 @@ def _credit_note_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             credit_note_tag.append(new_tag)
 
     xml = ET.tostring(credit_note_tag)
@@ -117,7 +116,7 @@ def _credit_note_xml(
 
 class CreditNote(Item):
 
-    base_path = u"/api/credit-notes"
+    base_path = "/api/credit-notes"
 
 
     def __init__(self, conn, id = None, credit_note_etree = None):
@@ -234,7 +233,7 @@ class CreditNote(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
     
         # Create CreditNote-Object
         credit_note = cls(conn = conn)
@@ -325,7 +324,7 @@ class CreditNote(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
 
 class CreditNotes(list):

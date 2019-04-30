@@ -6,18 +6,17 @@ Invoice-Tags
 - English API-Description: http://www.billomat.com/en/api/invoices/tags
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/rechnungen/schlagworte
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class InvoiceTag(Item):
 
-    base_path = u"/api/invoice-tags"
+    base_path = "/api/invoice-tags"
 
 
     def __init__(self, conn, id = None, tag_etree = None):
@@ -61,11 +60,11 @@ class InvoiceTag(Item):
         invoice_tag = ET.Element("invoice-tag")
 
         invoice_id_tag = ET.Element("invoice_id")
-        invoice_id_tag.text = unicode(int(invoice_id))
+        invoice_id_tag.text = str(int(invoice_id))
         invoice_tag.append(invoice_id_tag)
 
         name_tag = ET.Element("name")
-        name_tag.text = unicode(name)
+        name_tag.text = str(name)
         invoice_tag.append(name_tag)
 
         xml = ET.tostring(invoice_tag)
@@ -73,7 +72,7 @@ class InvoiceTag(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create Item-Object from XML
         item_object = cls(conn = conn)
@@ -165,7 +164,7 @@ class InvoiceTags(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"invoice_id: {invoice_id}".format(invoice_id = invoice_id)
+                        "invoice_id: {invoice_id}".format(invoice_id = invoice_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

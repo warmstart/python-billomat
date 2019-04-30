@@ -6,14 +6,12 @@ Recurrings (Abo-Rechnungen)
 - English API-Description: http://www.billomat.com/en/api/recurrings
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/abo-rechnungen
 """
-
-
 import datetime
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 def _recurring_xml(
@@ -106,7 +104,7 @@ def _recurring_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(int(value))
+            new_tag.text = str(int(value))
             recurring_tag.append(new_tag)
 
     # Date or string fields
@@ -117,7 +115,7 @@ def _recurring_xml(
             if isinstance(value, datetime.date):
                 new_tag.text = value.isoformat()
             else:
-                new_tag.text = unicode(value)
+                new_tag.text = str(value)
             recurring_tag.append(new_tag)
 
     # Date fields
@@ -133,7 +131,7 @@ def _recurring_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(float(value))
+            new_tag.text = str(float(value))
             recurring_tag.append(new_tag)
 
     # String Fields
@@ -141,7 +139,7 @@ def _recurring_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             recurring_tag.append(new_tag)
 
     xml = ET.tostring(recurring_tag)
@@ -152,7 +150,7 @@ def _recurring_xml(
 
 class Recurring(Item):
 
-    base_path = u"/api/recurrings"
+    base_path = "/api/recurrings"
 
 
     def __init__(self, conn, id = None, recurring_etree = None):
@@ -363,7 +361,7 @@ class Recurring(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
         # Create Recurring-Object
         recurring = cls(conn = conn)
@@ -511,7 +509,7 @@ class Recurring(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
 
 
 class Recurrings(list):

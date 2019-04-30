@@ -13,7 +13,7 @@ conn = pybillomat.Connection(
 
 # Load one client
 client = pybillomat.Client(conn = conn, id = 422909)
-print client
+print(client)
 # --> Client(id=422909, name=u'TESTFIRMA', ...)
 
 
@@ -23,7 +23,7 @@ clients_iterator = pybillomat.ClientsIterator(conn = conn)
 clients_iterator.search()
 for client in clients_iterator:
     assert isinstance(client, pybillomat.Client)
-    print client.name
+    print(client.name)
 
 
 # Iterate over the first 10 clients
@@ -31,15 +31,15 @@ clients_iterator = pybillomat.ClientsIterator(conn = conn, per_page = 10)
 clients_iterator.search()
 for client in clients_iterator[:10]:
     assert isinstance(client, pybillomat.Client)
-    print client.name
+    print(client.name)
 
 
 # Iterate over the last 10 clients
 clients_iterator = pybillomat.ClientsIterator(conn = conn, per_page = 10)
-clients_iterator.search(order_by = u"id DESC")
+clients_iterator.search(order_by = "id DESC")
 for client in clients_iterator[:10]:
     assert isinstance(client, pybillomat.Client)
-    print client.name
+    print(client.name)
 
 
 # Create new client (with all possible parameters)
@@ -49,20 +49,20 @@ client = pybillomat.Client.create(
     number_pre = None,
     number = None,
     number_length = None,
-    name = u"TEST-CUSTOMER with Umlauts ÖÄÜ",
+    name = "TEST-CUSTOMER with Umlauts ÖÄÜ",
     street = None,
-    zip = u"6020",
-    city = u"Innsbruck",
+    zip = "6020",
+    city = "Innsbruck",
     state = None,
-    country_code = u"AT",
-    first_name = u"TEST-FIRSTNAME",
-    last_name = u"TEST-LASTNAME",
+    country_code = "AT",
+    first_name = "TEST-FIRSTNAME",
+    last_name = "TEST-LASTNAME",
     salutation = None,
     phone = None,
     fax = None,
     mobile = None,
     email = None,
-    www = u"http://halvar.at/",
+    www = "http://halvar.at/",
     tax_number = None,
     vat_number = None,
     bank_account_number = None,
@@ -91,20 +91,20 @@ client = pybillomat.Client.create(
     price_group = None
 )
 assert isinstance(client, pybillomat.Client)
-print client.name, unicode(client.id)
+print(client.name, str(client.id))
 
 
 # Create new client (shorter version)
 client = pybillomat.Client.create(
     conn = conn,
-    name = u"TEST-CUSTOMER 2 with Umlauts ÖÄÜ",
-    zip = u"6020",
-    city = u"Innsbruck",
-    country_code = u"AT",
-    first_name = u"TEST-FIRSTNAME",
-    last_name = u"TEST-LASTNAME",
-    www = u"http://halvar.at/"
+    name = "TEST-CUSTOMER 2 with Umlauts ÖÄÜ",
+    zip = "6020",
+    city = "Innsbruck",
+    country_code = "AT",
+    first_name = "TEST-FIRSTNAME",
+    last_name = "TEST-LASTNAME",
+    www = "http://halvar.at/"
 )
 assert isinstance(client, pybillomat.Client)
-print client.name, unicode(client.id)
+print(client.name, str(client.id))
 
