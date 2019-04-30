@@ -8,6 +8,7 @@ Created
 """
 
 import os
+import io
 from setuptools import setup, find_packages
 
 THISDIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +26,7 @@ setup(
     description = (
         "Python Billomat API Client Library"
     ),
-    long_description = open("README.rst").read(),
+    long_description = io.open('README.rst', mode='r', encoding='utf-8').read(),
     keywords = (
         "Billomat, Client, API, Data Interchange, Google App Engine, REST Api"
     ),
