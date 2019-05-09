@@ -26,7 +26,7 @@ setup(
     description = (
         "Python Billomat API Client Library"
     ),
-    long_description = io.open('README.rst', mode='r', encoding='utf-8').read(),
+    long_description = io.open('README.rst', mode='r').read(),
     keywords = (
         "Billomat, Client, API, Data Interchange, Google App Engine, REST Api"
     ),
@@ -52,6 +52,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Networking",
     ],
-    install_requires = ["munch", "urllib3"],
+    install_requires = ["munch", "urllib3", "six"],
 )
 

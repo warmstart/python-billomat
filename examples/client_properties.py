@@ -14,7 +14,7 @@ conn = pybillomat.Connection(
 # Load one clients-property
 clients_property = pybillomat.ClientProperty(conn = conn, id = 123)
 print(clients_property)
-# --> ClientsProperty(id=123, ..., name=u'Test', type=u'TEXTFIELD', value=u'Test')
+# --> ClientsProperty(id=123, ..., name='Test', type='TEXTFIELD', value='Test')
 
 
 # This example iterates over ALL properties. It loads the properties gradually.

@@ -14,7 +14,7 @@ conn = pybillomat.Connection(
 # Load one invoice
 invoice = pybillomat.Invoice(conn = conn, id = 884447)
 print(invoice)
-# --> Invoice(address=u'TESTADRESSE', status=u'PAID', ...)
+# --> Invoice(address='TESTADRESSE', status='PAID', ...)
 
 
 # Iterate over the last 10 invoices

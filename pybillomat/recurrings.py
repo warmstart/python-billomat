@@ -10,6 +10,7 @@ import datetime
 import xml.etree.ElementTree as ET
 from . import errors
 from munch import Munch as Bunch
+from .compatible_utils import str_py2_compatible
 from .http import Url
 from ._items_base import Item, ItemsIterator
 
@@ -361,7 +362,7 @@ class Recurring(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create Recurring-Object
         recurring = cls(conn = conn)
@@ -509,7 +510,7 @@ class Recurring(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
 
 class Recurrings(list):

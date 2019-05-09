@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
+import six
 
 import datetime
 from . import errors
+from .compatible_utils import str_py2_compatible
 import xml.etree.ElementTree as ET
 from munch import Munch as Bunch
 
@@ -47,7 +49,7 @@ class Item(Bunch):
                 elif type == "float":
                     setattr(self, tag, float(text))
                 else:
-                    if isinstance(text, str):
+                    if isinstance(text, str) and six.PY2:
                         text = text.decode("utf-8")
                     setattr(self, tag, text)
 
@@ -207,7 +209,7 @@ class Item(Bunch):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(str(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
 
     @property
