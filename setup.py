@@ -26,7 +26,7 @@ setup(
     description = (
         "Python Billomat API Client Library"
     ),
-    long_description = io.open('README.rst', mode='r').read(),
+    long_description = io.open('README.rst', mode='r', encoding='utf-8').read(),
     keywords = (
         "Billomat, Client, API, Data Interchange, Google App Engine, REST Api"
     ),
