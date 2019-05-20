@@ -6,13 +6,13 @@ Clients
 - English API-Description: http://www.billomat.com/en/api/clients
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/kunden
 """
-
 import datetime
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 def _client_xml(
@@ -74,107 +74,107 @@ def _client_xml(
         client_tag.append(archived_tag)
     if number_pre is not None:
         number_pre_tag = ET.Element("number_pre")
-        number_pre_tag.text = unicode(number_pre)
+        number_pre_tag.text = str(number_pre)
         client_tag.append(number_pre_tag)
     if number is not None:
         number_tag = ET.Element("number")
-        number_tag.text = unicode(int(number))
+        number_tag.text = str(int(number))
         client_tag.append(number_tag)
     if number_length is not None:
         number_length_tag = ET.Element("number_length")
-        number_length_tag.text = unicode(int(number_length))
+        number_length_tag.text = str(int(number_length))
         client_tag.append(number_length_tag)
     if name is not None:
         name_tag = ET.Element("name")
-        name_tag.text = unicode(name)
+        name_tag.text = str(name)
         client_tag.append(name_tag)
     if street is not None:
         street_tag = ET.Element("street")
-        street_tag.text = unicode(street)
+        street_tag.text = str(street)
         client_tag.append(street_tag)
     if zip is not None:
         zip_tag = ET.Element("zip")
-        zip_tag.text = unicode(zip)
+        zip_tag.text = str(zip)
         client_tag.append(zip_tag)
     if city is not None:
         city_tag = ET.Element("city")
-        city_tag.text = unicode(city)
+        city_tag.text = str(city)
         client_tag.append(city_tag)
     if state is not None:
         state_tag = ET.Element("state")
-        state_tag.text = unicode(state)
+        state_tag.text = str(state)
         client_tag.append(state_tag)
     if country_code is not None:
         country_code_tag = ET.Element("country_code")
-        country_code_tag.text = unicode(country_code)
+        country_code_tag.text = str(country_code)
         client_tag.append(country_code_tag)
     if first_name is not None:
         first_name_tag = ET.Element("first_name")
-        first_name_tag.text = unicode(first_name)
+        first_name_tag.text = str(first_name)
         client_tag.append(first_name_tag)
     if last_name is not None:
         last_name_tag = ET.Element("last_name")
-        last_name_tag.text = unicode(last_name)
+        last_name_tag.text = str(last_name)
         client_tag.append(last_name_tag)
     if salutation is not None:
         salutation_tag = ET.Element("salutation")
-        salutation_tag.text = unicode(salutation)
+        salutation_tag.text = str(salutation)
         client_tag.append(salutation_tag)
     if phone is not None:
         phone_tag = ET.Element("phone")
-        phone_tag.text = unicode(phone)
+        phone_tag.text = str(phone)
         client_tag.append(phone_tag)
     if fax is not None:
         fax_tag = ET.Element("fax")
-        fax_tag.text = unicode(fax)
+        fax_tag.text = str(fax)
         client_tag.append(fax_tag)
     if mobile is not None:
         mobile_tag = ET.Element("mobile")
-        mobile_tag.text = unicode(mobile)
+        mobile_tag.text = str(mobile)
         client_tag.append(mobile_tag)
     if email is not None:
         email_tag = ET.Element("email")
-        email_tag.text = unicode(email)
+        email_tag.text = str(email)
         client_tag.append(email_tag)
     if www is not None:
         www_tag = ET.Element("www")
-        www_tag.text = unicode(www)
+        www_tag.text = str(www)
         client_tag.append(www_tag)
     if tax_number is not None:
         tax_number_tag = ET.Element("tax_number")
-        tax_number_tag.text = unicode(tax_number)
+        tax_number_tag.text = str(tax_number)
         client_tag.append(tax_number_tag)
     if vat_number is not None:
         vat_number_tag = ET.Element("vat_number")
-        vat_number_tag.text = unicode(vat_number)
+        vat_number_tag.text = str(vat_number)
         client_tag.append(vat_number_tag)
     if bank_account_number is not None:
         bank_account_number_tag = ET.Element("bank_account_number")
-        bank_account_number_tag.text = unicode(bank_account_number)
+        bank_account_number_tag.text = str(bank_account_number)
         client_tag.append(bank_account_number_tag)
     if bank_account_owner is not None:
         bank_account_owner_tag = ET.Element("bank_account_owner")
-        bank_account_owner_tag.text = unicode(bank_account_owner)
+        bank_account_owner_tag.text = str(bank_account_owner)
         client_tag.append(bank_account_owner_tag)
     if bank_number is not None:
         bank_number_tag = ET.Element("bank_number")
-        bank_number_tag.text = unicode(bank_number)
+        bank_number_tag.text = str(bank_number)
         client_tag.append(bank_number_tag)
     if bank_name is not None:
         bank_name_tag = ET.Element("bank_name")
-        bank_name_tag.text = unicode(bank_name)
+        bank_name_tag.text = str(bank_name)
         client_tag.append(bank_name_tag)
     if bank_swift is not None:
         bank_swift_tag = ET.Element("bank_swift")
-        bank_swift_tag.text = unicode(bank_swift)
+        bank_swift_tag.text = str(bank_swift)
         client_tag.append(bank_swift_tag)
     if bank_iban is not None:
         bank_iban_tag = ET.Element("bank_iban")
-        bank_iban_tag.text = unicode(bank_iban)
+        bank_iban_tag.text = str(bank_iban)
         client_tag.append(bank_iban_tag)
     if sepa_mandate is not None:
         sepa_mandate_tag = ET.Element("sepa_mandate")
-        sepa_mandate_tag.text = unicode(sepa_mandate)
+        sepa_mandate_tag.text = str(sepa_mandate)
         client_tag.append(sepa_mandate_tag)
     if sepa_mandate_date is not None:
         assert isinstance(sepa_mandate_date, datetime.date)
@@ -182,9 +182,9 @@ def _client_xml(
         sepa_mandate_date_tag.text = sepa_mandate_date.isoformat()
         client_tag.append(sepa_mandate_date_tag)
     if tax_rule is not None:
-        assert unicode(tax_rule).upper() in ["TAX", "NO_TAX", "COUNTRY"]
+        assert str(tax_rule).upper() in ["TAX", "NO_TAX", "COUNTRY"]
         tax_rule_tag = ET.Element("tax_rule")
-        tax_rule_tag.text = unicode(tax_rule).upper()
+        tax_rule_tag.text = str(tax_rule).upper()
         client_tag.append(tax_rule_tag)
     if default_payment_types is not None:
         if isinstance(default_payment_types, (list, tuple)):
@@ -192,87 +192,87 @@ def _client_xml(
                 item.upper() for item in default_payment_types
             ])
         default_payment_types_tag = ET.Element("default_payment_types")
-        default_payment_types_tag.text = unicode(default_payment_types)
+        default_payment_types_tag.text = str(default_payment_types)
         client_tag.append(default_payment_types_tag)
     if net_gross is not None:
-        assert unicode(net_gross).upper() in ["NET", "GROSS", "SETTINGS"]
+        assert str(net_gross).upper() in ["NET", "GROSS", "SETTINGS"]
         net_gross_tag = ET.Element("net_gross")
-        net_gross_tag.text = unicode(net_gross).upper()
+        net_gross_tag.text = str(net_gross).upper()
         client_tag.append(net_gross_tag)
     if note is not None:
         note_tag = ET.Element("note")
-        note_tag.text = unicode(note)
+        note_tag.text = str(note)
         client_tag.append(note_tag)
     if discount_rate_type is not None:
-        assert unicode(discount_rate_type).upper() in [
+        assert str(discount_rate_type).upper() in [
             "ABSOLUTE", "RELATIVE", "SETTINGS"
         ]
         discount_rate_type_tag = ET.Element("discount_rate_type")
-        discount_rate_type_tag.text = unicode(discount_rate_type).upper()
+        discount_rate_type_tag.text = str(discount_rate_type).upper()
         client_tag.append(discount_rate_type_tag)
     if discount_rate is not None:
         discount_rate_tag = ET.Element("discount_rate")
-        discount_rate_tag.text = unicode(float(discount_rate))
+        discount_rate_tag.text = str(float(discount_rate))
         client_tag.append(discount_rate_tag)
     if discount_days_type is not None:
-        assert unicode(discount_days_type).upper() in [
+        assert str(discount_days_type).upper() in [
             "ABSOLUTE", "RELATIVE", "SETTINGS"
         ]
         discount_days_type_tag = ET.Element("discount_days_type")
-        discount_days_type_tag.text = unicode(discount_days_type).upper()
+        discount_days_type_tag.text = str(discount_days_type).upper()
         client_tag.append(discount_days_type_tag)
     if discount_days is not None:
         discount_days_tag = ET.Element("discount_days")
-        discount_days_tag.text = unicode(float(discount_days))
+        discount_days_tag.text = str(float(discount_days))
         client_tag.append(discount_days_tag)
     if due_days_type is not None:
-        assert unicode(due_days_type).upper() in [
+        assert str(due_days_type).upper() in [
             "ABSOLUTE", "RELATIVE", "SETTINGS"
         ]
         due_days_type_tag = ET.Element("due_days_type")
-        due_days_type_tag.text = unicode(due_days_type).upper()
+        due_days_type_tag.text = str(due_days_type).upper()
         client_tag.append(due_days_type_tag)
     if due_days is not None:
         due_days_tag = ET.Element("due_days")
         due_days_tag.text = int(due_days)
         client_tag.append(due_days_tag)
     if reminder_due_days_type is not None:
-        assert unicode(reminder_due_days_type).upper() in [
+        assert str(reminder_due_days_type).upper() in [
             "ABSOLUTE", "RELATIVE", "SETTINGS"
         ]
         reminder_due_days_type_tag = ET.Element("reminder_due_days_type")
-        reminder_due_days_type_tag.text = unicode(reminder_due_days_type).upper()
+        reminder_due_days_type_tag.text = str(reminder_due_days_type).upper()
         client_tag.append(reminder_due_days_type_tag)
     if reminder_due_days is not None:
         reminder_due_days_tag = ET.Element("reminder_due_days")
-        reminder_due_days_tag.text = unicode(int(reminder_due_days))
+        reminder_due_days_tag.text = str(int(reminder_due_days))
         client_tag.append(reminder_due_days_tag)
     if offer_validity_days_type is not None:
-        assert unicode(offer_validity_days_type).upper() in [
+        assert str(offer_validity_days_type).upper() in [
             "ABSOLUTE", "RELATIVE", "SETTINGS"
         ]
         offer_validity_days_type_tag = ET.Element("offer_validity_days_type")
-        offer_validity_days_type_tag.text = unicode(offer_validity_days_type)
+        offer_validity_days_type_tag.text = str(offer_validity_days_type)
         client_tag.append(offer_validity_days_type_tag)
     if offer_validity_days is not None:
         offer_validity_days_tag = ET.Element("offer_validity_days")
-        offer_validity_days_tag.text = unicode(int(offer_validity_days))
+        offer_validity_days_tag.text = str(int(offer_validity_days))
         client_tag.append(offer_validity_days_tag)
     if currency_code is not None:
         currency_code_tag = ET.Element("currency_code")
-        currency_code_tag.text = unicode(currency_code)
+        currency_code_tag.text = str(currency_code)
         client_tag.append(currency_code_tag)
     if debitor_account_number is not None:
         debitor_account_number_tag = ET.Element("debitor_account_number")
-        debitor_account_number_tag.text = unicode(debitor_account_number)
+        debitor_account_number_tag.text = str(debitor_account_number)
         client_tag.append(debitor_account_number_tag)
     if price_group is not None:
         price_group_tag = ET.Element("price_group")
-        price_group_tag.text = unicode(int(price_group))
+        price_group_tag.text = str(int(price_group))
         client_tag.append(price_group_tag)
     if locale is not None:
         locale_tag = ET.Element("locale")
-        locale_tag.text = unicode(locale)
+        locale_tag.text = str(locale)
         client_tag.append(locale_tag)
 
     xml = ET.tostring(client_tag)
@@ -283,7 +283,7 @@ def _client_xml(
 
 class Client(Item):
 
-    base_path = u"/api/clients"
+    base_path = "/api/clients"
 
 
     def __init__(self, conn, id = None, client_etree = None):
@@ -543,7 +543,7 @@ class Client(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create Client-Object
         client = cls(conn = conn)
@@ -752,7 +752,7 @@ class Client(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
 
 class Clients(list):

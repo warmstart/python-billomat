@@ -6,13 +6,13 @@ Articles
 - English API-Description: http://www.billomat.com/en/api/articles
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/artikel
 """
-
 import datetime
 import xml.etree.ElementTree as ET
 from munch import Munch as Bunch
-from http import Url
-import errors
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from . import errors
+from ._items_base import Item, ItemsIterator
 
 
 def _article_xml(
@@ -67,7 +67,7 @@ def _article_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(int(value))
+            new_tag.text = str(int(value))
             article_tag.append(new_tag)
 
     # Float Fields
@@ -75,7 +75,7 @@ def _article_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(float(value))
+            new_tag.text = str(float(value))
             article_tag.append(new_tag)
 
     # String Fields
@@ -83,7 +83,7 @@ def _article_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             article_tag.append(new_tag)
 
     xml = ET.tostring(article_tag)
@@ -95,7 +95,7 @@ def _article_xml(
 
 class Article(Item):
 
-    base_path = u"/api/articles"
+    base_path = "/api/articles"
 
 
     def __init__(self, conn, id = None, article_etree = None):
@@ -208,7 +208,7 @@ class Article(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
     
         # Create Article-Object
         article = cls(conn = conn)
@@ -300,7 +300,7 @@ class Article(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
 
     # def get_tags(self):

@@ -3,101 +3,100 @@
 """
 Python-Billomat - Billomat API Client Library
 """
-
-from http import Connection
-from clients import (
+from .http import Connection
+from .clients import (
     Client,
     ClientsIterator
 )
-from contacts import (
+from .contacts import (
     Contact,
     ContactsIterator
 )
-from invoices import (
+from .invoices import (
     Invoice,
     InvoicesIterator
 )
-from invoice_items import (
+from .invoice_items import (
     InvoiceItem,
     InvoiceItemsIterator
 )
-from invoice_payments import (
+from .invoice_payments import (
     InvoicePayment,
     InvoicePaymentsIterator
 )
-from invoice_tags import (
+from .invoice_tags import (
     InvoiceTag,
     InvoiceTagsIterator
 )
-from client_properties import (
+from .client_properties import (
     ClientProperty,
     ClientPropertiesIterator
 )
-from client_tags import (
+from .client_tags import (
     ClientTag,
     ClientTagsIterator
 )
-from articles import (
+from .articles import (
     Article,
     ArticlesIterator
 )
-from article_properties import (
+from .article_properties import (
     ArticleProperty,
     ArticlePropertiesIterator
 )
-from article_tags import (
+from .article_tags import (
     ArticleTag,
     ArticleTagsIterator
 )
-from recurrings import (
+from .recurrings import (
     Recurring,
     RecurringsIterator
 )
-from recurring_items import (
+from .recurring_items import (
     RecurringItem,
     RecurringItemsIterator
 )
-from recurring_tags import (
+from .recurring_tags import (
     RecurringTag,
     RecurringTagsIterator
 )
-from recurring_email_receivers import (
+from .recurring_email_receivers import (
     RecurringEmailReceiver,
     RecurringEmailReceiversIterator
 )
-from email_templates import (
+from .email_templates import (
     EmailTemplate,
     EmailTemplatesIterator
 )
-from reminders import (
+from .reminders import (
     Reminder,
     RemindersIterator
 )
-from reminder_items import (
+from .reminder_items import (
     ReminderItem,
     ReminderItemsIterator
 )
-from reminder_tags import (
+from .reminder_tags import (
     ReminderTag,
     ReminderTagsIterator
 )
-from reminder_texts import (
+from .reminder_texts import (
     ReminderText,
     ReminderTextsIterator
 )
-from suppliers import (
+from .suppliers import (
     Supplier,
     SuppliersIterator
 )
-from credit_notes import (
+from .credit_notes import (
     CreditNote,
     CreditNotesIterator
 )
-from credit_note_items import (
+from .credit_note_items import (
     CreditNoteItem,
     CreditNoteItemsIterator
 )
-from credit_note_tags import (
+from .credit_note_tags import (
     CreditNoteTag,
     CreditNoteTagsIterator
 )

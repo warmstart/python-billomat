@@ -6,18 +6,18 @@ Client-Properties
 - English API-Description: http://www.billomat.com/en/api/clients/properties
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/kunden/attribute
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class ClientProperty(Item):
 
-    base_path = u"/api/client-property-values"
+    base_path = "/api/client-property-values"
 
 
     def __init__(self, conn, id = None, property_etree = None):
@@ -65,15 +65,15 @@ class ClientProperty(Item):
         property_tag = ET.Element("client-property-value")
 
         client_id_tag = ET.Element("client_id")
-        client_id_tag.text = unicode(int(client_id))
+        client_id_tag.text = str(int(client_id))
         property_tag.append(client_id_tag)
 
         client_property_id_tag = ET.Element("client_property_id")
-        client_property_id_tag.text = unicode(int(client_property_id))
+        client_property_id_tag.text = str(int(client_property_id))
         property_tag.append(client_property_id_tag)
 
         value_tag = ET.Element("value")
-        value_tag.text = unicode(value)
+        value_tag.text = str(value)
         property_tag.append(value_tag)
 
         xml = ET.tostring(property_tag)
@@ -81,7 +81,7 @@ class ClientProperty(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create Property-Object
         property = cls(conn = conn)
@@ -183,7 +183,7 @@ class ClientProperties(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"client_id: {client_id}".format(client_id = client_id)
+                        "client_id: {client_id}".format(client_id = client_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

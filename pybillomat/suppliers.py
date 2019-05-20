@@ -6,13 +6,12 @@ Suppliers
 - English API-Description: http://www.billomat.com/en/api/suppliers
 - Deutsche API-Beschreibung: http://www.billomat.com/api/lieferanten
 """
-
-
-import errors
+from . import errors
 import xml.etree.ElementTree as ET
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 def _supplier_xml(
@@ -83,7 +82,7 @@ def _supplier_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             supplier_tag.append(new_tag)
 
     xml = ET.tostring(supplier_tag)
@@ -94,7 +93,7 @@ def _supplier_xml(
 
 class Supplier(Item):
 
-    base_path = u"/api/suppliers"
+    base_path = "/api/suppliers"
 
 
     def __init__(self, conn, id = None, supplier_etree = None):
@@ -244,7 +243,7 @@ class Supplier(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create Supplier-Object
         supplier = cls(conn = conn)
@@ -366,7 +365,7 @@ class Supplier(Item):
         # Send PUT-request
         response = self.conn.put(path = path, body = xml)
         if response.status != 200:  # Edited
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
 
 class Suppliers(list):

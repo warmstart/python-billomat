@@ -6,18 +6,18 @@ CreditNote-Tags
 - English API-Description: http://www.billomat.com/en/api/credit-notes/tags/
 - Deutsche API-Beschreibung: http://www.billomat.com/api/gutschriften/schlagworte/
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 class CreditNoteTag(Item):
 
-    base_path = u"/api/credit-note-tags"
+    base_path = "/api/credit-note-tags"
 
 
     def __init__(self, conn, id = None, tag_etree = None):
@@ -61,11 +61,11 @@ class CreditNoteTag(Item):
         credit_note_tag = ET.Element("credit-note-tag")
 
         credit_note_id_tag = ET.Element("credit_note_id")
-        credit_note_id_tag.text = unicode(int(credit_note_id))
+        credit_note_id_tag.text = str(int(credit_note_id))
         credit_note_tag.append(credit_note_id_tag)
 
         name_tag = ET.Element("name")
-        name_tag.text = unicode(name)
+        name_tag.text = str(name)
         credit_note_tag.append(name_tag)
 
         xml = ET.tostring(credit_note_tag)
@@ -73,7 +73,7 @@ class CreditNoteTag(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create Item-Object from XML
         item_object = cls(conn = conn)
@@ -165,7 +165,7 @@ class CreditNoteTags(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"credit_note_id: {credit_note_id}".format(credit_note_id = credit_note_id)
+                        "credit_note_id: {credit_note_id}".format(credit_note_id = credit_note_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)

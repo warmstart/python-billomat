@@ -6,13 +6,13 @@ Invoice-Payments
 - English API-Description: http://www.billomat.com/en/api/invoices/payments
 - Deutsche API-Beschreibung: http://www.billomat.com/de/api/rechnungen/zahlungen
 """
-
 import urllib3
 import xml.etree.ElementTree as ET
-import errors
+from . import errors
 from munch import Munch as Bunch
-from http import Url
-from _items_base import Item, ItemsIterator
+from .compatible_utils import str_py2_compatible
+from .http import Url
+from ._items_base import Item, ItemsIterator
 
 
 def _invoice_payment_xml(
@@ -51,7 +51,7 @@ def _invoice_payment_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(int(value))
+            new_tag.text = str(int(value))
             invoice_payment_tag.append(new_tag)
 
     # Date fields
@@ -67,7 +67,7 @@ def _invoice_payment_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(float(value))
+            new_tag.text = str(float(value))
             invoice_payment_tag.append(new_tag)
 
     # Boolean Fields
@@ -83,7 +83,7 @@ def _invoice_payment_xml(
         value = locals()[field_name]
         if value is not None:
             new_tag = ET.Element(field_name)
-            new_tag.text = unicode(value)
+            new_tag.text = str(value)
             invoice_payment_tag.append(new_tag)
 
     xml = ET.tostring(invoice_payment_tag)
@@ -94,7 +94,7 @@ def _invoice_payment_xml(
 
 class InvoicePayment(Item):
 
-    base_path = u"/api/invoice-payments"
+    base_path = "/api/invoice-payments"
 
 
     def __init__(self, conn, id = None, payment_etree = None):
@@ -176,7 +176,7 @@ class InvoicePayment(Item):
         # Send POST-request
         response = conn.post(path = cls.base_path, body = xml)
         if response.status != 201:  # Created
-            raise errors.BillomatError(unicode(response.data, encoding = "utf-8"))
+            raise errors.BillomatError(str_py2_compatible(response.data))
 
         # Create InvoicePayment-Object
         invoice_payment = cls(conn = conn)
@@ -296,7 +296,7 @@ class InvoicePayments(list):
                 text = error_etree.text
                 if text.lower() == "unauthorized":
                     raise errors.NotFoundError(
-                        u"invoice_id: {invoice_id}".format(invoice_id = invoice_id)
+                        "invoice_id: {invoice_id}".format(invoice_id = invoice_id)
                     )
             # Other Error
             raise errors.BillomatError(response.data)
