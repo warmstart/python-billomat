@@ -272,11 +272,15 @@ class Url(object):
 
         if self.netloc:
             scheme = self.scheme or "http"
+            if isinstance(scheme, bytes):
+                scheme = scheme.decode("utf-8")
         else:
-            scheme = None
+            scheme = ''
 
         if isinstance(self.path, basestring):
             path = self.path
+            if isinstance(path, bytes):
+                path = path.decode("utf-8")
         else:
             try:
                 path = "/".join(self.path) or "/"
