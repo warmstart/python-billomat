@@ -41,6 +41,7 @@ def _invoice_xml(
     confirmation_id = None,
     recurring_id = None,
     template_id = None,
+    invoice_items = None,
 ):
     """
     Creates the XML to add or edit an invoice
@@ -81,6 +82,9 @@ def _invoice_xml(
         "reduction",
         "net_gross",
         "payment_types",
+    ]
+    list_fieldnames = [
+        "invoice_items",
     ]
 
     invoice_tag = ET.Element("invoice")
@@ -127,6 +131,24 @@ def _invoice_xml(
             new_tag = ET.Element(field_name)
             new_tag.text = str(value)
             invoice_tag.append(new_tag)
+
+    # List Fields
+    for field_name in list_fieldnames:
+        value = locals()[field_name]
+        if value is not None:
+            new_tag = ET.Element(field_name)
+            for subfield in value:
+                ## since this is usually just the singular of field_name, remove the last character "s"
+                new_inner_tag = ET.Element(field_name[:-1])
+                # parse single item dictionaries into the xml tree
+                for key, subvalue in subfield.items():
+                    if subvalue is not None:
+                        new_sub_tag = ET.Element(key)
+                        new_sub_tag.text = str(subvalue)
+                        new_inner_tag.append(new_sub_tag)
+                new_tag.append(new_inner_tag)
+            invoice_tag.append(new_tag)
+
 
     xml = ET.tostring(invoice_tag)
 
@@ -440,7 +462,7 @@ class Invoice(Item):
         confirmation_id = None,
         recurring_id = None,
         template_id = None,
-        # invoice_items = None
+        invoice_items = None
     ):
         """
         Creates an invoice
@@ -480,7 +502,7 @@ class Invoice(Item):
         :param recurring_id: The ID of the recurring, if the invoice was
             created from a recurring.
         :param template_id: ID of template to use.
-        # :param invoice_items: List with InvoiceItem-Objects
+        :param invoice_items: List with InvoiceItem-Objects
         """
 
         # XML
@@ -510,7 +532,8 @@ class Invoice(Item):
             offer_id = offer_id,
             confirmation_id = confirmation_id,
             recurring_id = recurring_id,
-            template_id = template_id
+            template_id = template_id,
+            invoice_items = invoice_items,
         )
 
         # Send POST-request
